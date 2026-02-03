@@ -1,0 +1,9 @@
+<library path="trajectory_relay_rviz_plugin">
+  <class name="trajectory_relay_rviz_plugin/RelayControlPanel"
+         type="trajectory_relay_rviz_plugin::RelayControlPanel"
+         base_class_type="rviz_common::Panel">
+    <description>
+      Panel to switch trajectory relay input selector.
+    </description>
+  </class>
+</library>`

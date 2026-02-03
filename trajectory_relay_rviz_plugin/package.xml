@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_xml_v2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="2">
+  <name>trajectory_relay_rviz_plugin</name>
+  <version>0.0.0</version>
+  <description>RViz plugin for trajectory relay control</description>
+  <maintainer email="autoware@example.com">autoware</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>rviz_common</depend>
+  <depend>pluginlib</depend>
+  <depend>rcl_interfaces</depend>
+  <depend>libqt5-widgets</depend> <export>
+    <build_type>ament_cmake</build_type>
+    <rviz_common plugin="${prefix}/plugins.description.xml"/>
+  </export>
+</package>
