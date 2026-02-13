@@ -13,8 +13,8 @@ def generate_launch_description():
             output='screen',
             parameters=[
                 {'input_selector': LaunchConfiguration('input_selector')},
-                {'out_topic': '/planning/trajectory'},
-                {'in_topic_1': '/planning/trajectory/planning_validator'},
+                {'out_topic': '/planning/scenario_planning/trajectory'},
+                {'in_topic_1': '/planning/scenario_planning/trajectory_validator'},
                 {'in_topic_2': '/planning/trajectory/diffusion_planner'}
             ]
         )

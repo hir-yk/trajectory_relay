@@ -49,11 +49,25 @@ void RelayControlPanel::onInitialize() {
 }
 
 void RelayControlPanel::setSelector(int value) {
-  auto client = client_node_->create_client<rcl_interfaces::srv::SetParameters>("/planning/trajectory_relay_node/set_parameters");
-  
-  // サービスの存在確認
-  if (!client->wait_for_service(std::chrono::milliseconds(500))) {
-    RCLCPP_WARN(client_node_->get_logger(), "Parameter service not found!");
+  // メインのサービス (/trajectory_relay_node)
+  auto client = client_node_->create_client<rcl_interfaces::srv::SetParameters>(
+      "/trajectory_relay_node/set_parameters");
+
+  // フォールバックサービス (/planning/trajectory_relay_node)
+  auto fallback_client = client_node_->create_client<rcl_interfaces::srv::SetParameters>(
+      "/planning/trajectory_relay_node/set_parameters");
+
+  // メインサービス待機
+  bool main_available = client->wait_for_service(std::chrono::milliseconds(300));
+
+  // フォールバックサービス待機
+  bool fallback_available = false;
+  if (!main_available) {
+    fallback_available = fallback_client->wait_for_service(std::chrono::milliseconds(300));
+  }
+
+  if (!main_available && !fallback_available) {
+    RCLCPP_WARN(client_node_->get_logger(), "Parameter services not found!");
     return;
   }
 
@@ -64,7 +78,11 @@ void RelayControlPanel::setSelector(int value) {
   p.value.integer_value = value;
   request->parameters.push_back(p);
 
-  client->async_send_request(request);
+  if (main_available) {
+    client->async_send_request(request);
+  } else {
+    fallback_client->async_send_request(request);
+  }
 }
 
 } // namespace trajectory_relay_rviz_plugin
